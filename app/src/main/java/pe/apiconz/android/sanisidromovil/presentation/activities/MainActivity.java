@@ -106,7 +106,9 @@ public class MainActivity extends BaseActivity {
                     String nombreEvento = postSnapshot.child("EVENTO").getValue().toString();
                     String fechaEvento = postSnapshot.child("FECHA").getValue().toString();
                     String horaEvento = postSnapshot.child("HORA").getValue().toString();
-                    EventEntity eventEntity = new EventEntity(nombreEvento, fechaEvento, horaEvento, 0);
+                    int id = postSnapshot.child("ID").getValue(int.class);
+
+                    EventEntity eventEntity = new EventEntity(nombreEvento, fechaEvento, horaEvento, id);
                     tomorrowActitivies.add(eventEntity);
 
 
@@ -132,8 +134,10 @@ public class MainActivity extends BaseActivity {
                     String nombreEvento = postSnapshot.child("EVENTO").getValue().toString();
                     String fechaEvento = postSnapshot.child("FECHA").getValue().toString();
                     String horaEvento = postSnapshot.child("HORA").getValue().toString();
+                    int id = postSnapshot.child("ID").getValue(int.class);
 
-                    EventEntity eventEntity = new EventEntity(nombreEvento, fechaEvento, horaEvento, 0);
+
+                    EventEntity eventEntity = new EventEntity(nombreEvento, fechaEvento, horaEvento, id);
                     currentActitivies.add(eventEntity);
                 }
             }
@@ -156,8 +160,9 @@ public class MainActivity extends BaseActivity {
                     String nombreEvento = postSnapshot.child("EVENTO").getValue().toString();
                     String fechaEvento = postSnapshot.child("FECHA").getValue().toString();
                     String horaEvento = postSnapshot.child("HORA").getValue().toString();
+                    int id = postSnapshot.child("ID").getValue(int.class);
 
-                    EventEntity eventEntity = new EventEntity(nombreEvento, fechaEvento, horaEvento, 0);
+                    EventEntity eventEntity = new EventEntity(nombreEvento, fechaEvento, horaEvento, id);
                     soonActitivies.add(eventEntity);
                 }
             }

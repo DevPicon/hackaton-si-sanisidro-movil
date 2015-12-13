@@ -24,6 +24,7 @@ public class CardContentAllFragment extends BaseFragment {
     protected void onCreatedView() {
         List<EventEntity> list = (List<EventEntity>) getArguments().get("soonActitivies");
         adapter = new ActivityAdapter(list);
+        adapter.setHasStableIds(true);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

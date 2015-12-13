@@ -1,5 +1,6 @@
 package pe.apiconz.android.sanisidromovil.presentation.adapters;
 
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -10,6 +11,7 @@ import android.widget.TextView;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pe.apiconz.android.sanisidromovil.R;
+import pe.apiconz.android.sanisidromovil.presentation.activities.DetailActivity;
 
 /**
  * Created by Armando on 12/12/2015.
@@ -29,9 +31,21 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
     @Bind(R.id.add_button)
     protected ImageButton scheduleButton;
 
+
     public ActivityViewHolder(View itemView) {
         super(itemView);
-        ButterKnife.bind(this,itemView);
+        ButterKnife.bind(this, itemView);
+
+        actionButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                Intent intent = new Intent(v.getContext(), DetailActivity.class);
+                intent.putExtra("id",v.getId());
+                intent.putExtra("itemId",getItemId());
+                v.getContext().startActivity(intent);
+            }
+        });
     }
 
     public Button getActionButton() {

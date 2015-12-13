@@ -35,6 +35,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         EventEntity eventEntity = eventList.get(position);
         activityViewHolder.getCardTitle().setText(eventEntity.getNombre());
         activityViewHolder.getCardText().setText(Utils.formatDateTime(eventEntity));
+
     }
 
 

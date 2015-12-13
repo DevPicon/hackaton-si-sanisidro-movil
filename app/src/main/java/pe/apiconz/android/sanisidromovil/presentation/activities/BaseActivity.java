@@ -26,6 +26,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         onCreateView();
     }
 
+    
     protected abstract void onCreateView();
 
     protected abstract void setSupportActionBar();

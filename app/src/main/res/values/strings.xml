@@ -15,4 +15,6 @@
     <string name="nav_menu_agenda">Agenda</string>
     <string name="nav_menu_campana">Campaña</string>
     <string name="nav_menu_bici">Bici</string>
+
+    <string name="button_detail">Ver Información</string>
 </resources>
