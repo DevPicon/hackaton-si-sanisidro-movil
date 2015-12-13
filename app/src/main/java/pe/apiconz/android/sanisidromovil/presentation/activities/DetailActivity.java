@@ -48,12 +48,6 @@ public class DetailActivity extends BaseActivity {
             evento = new EventDetailEntity();
 
             getEventDetail(itemId);
-            detailEventName.setText(evento.getEvento());
-            detailEventArtist.setText(evento.getArtista());
-            detailEventDate.setText(evento.getFecha());
-            detailEventTime.setText(evento.getHora());
-            detailEventPlace.setText(evento.getLugar());
-            this.notify();
 
         }
     }
@@ -63,7 +57,7 @@ public class DetailActivity extends BaseActivity {
         SanIsidroMovilApp application = (SanIsidroMovilApp) getApplicationContext();
         Firebase firebase = application.getFirebaseReferenceForActivities();
         Query query = firebase.orderByChild("ID").startAt(itemId).endAt(itemId);
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
 
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -78,6 +72,14 @@ public class DetailActivity extends BaseActivity {
                     evento.setEspacio(postSnapshot.child("ESPACIO").getValue().toString());
                     evento.setArtista(postSnapshot.child("ARTISTA").getValue().toString());
                     evento.setId(postSnapshot.child("ID").getValue(int.class));
+
+
+                    detailEventName.setText(postSnapshot.child("EVENTO").getValue().toString());
+                    detailEventArtist.setText(postSnapshot.child("ARTISTA").getValue().toString());
+                    detailEventDate.setText(postSnapshot.child("FECHA").getValue().toString());
+                    detailEventTime.setText(postSnapshot.child("HORA").getValue().toString());
+                    detailEventPlace.setText(postSnapshot.child("LUGAR").getValue().toString());
+
                     Log.d(TAG,evento.toString());
 
                 } else {
