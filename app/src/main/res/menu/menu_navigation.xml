@@ -4,14 +4,14 @@
         <item
             android:icon="@drawable/ic_home_black_24dp"
             android:tint="@color/button_grey"
-            android:title="One" />
+            android:title="@string/nav_menu_inicio" />
         <item
             android:icon="@drawable/ic_calendar_black_24dp"
             android:tint="@color/button_grey"
-            android:title="Three" />
+            android:title="@string/nav_menu_agenda" />
         <item
             android:icon="@drawable/ic_bike_black_24dp"
             android:tint="@color/button_grey"
-            android:title="Two" />
+            android:title="@string/nav_menu_bici" />
     </group>
 </menu>

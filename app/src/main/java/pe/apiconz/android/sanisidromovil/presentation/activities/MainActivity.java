@@ -1,5 +1,7 @@
 package pe.apiconz.android.sanisidromovil.presentation.activities;
 
+import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -9,17 +11,31 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.util.Log;
 import android.view.MenuItem;
+
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import pe.apiconz.android.sanisidromovil.R;
-import pe.apiconz.android.sanisidromovil.presentation.fragments.CardContentFragment;
+import pe.apiconz.android.sanisidromovil.application.SanIsidroMovilApp;
+import pe.apiconz.android.sanisidromovil.model.entities.EventEntity;
+import pe.apiconz.android.sanisidromovil.presentation.fragments.CardContentAllFragment;
+import pe.apiconz.android.sanisidromovil.presentation.fragments.CardContentTodayFragment;
+import pe.apiconz.android.sanisidromovil.presentation.fragments.CardContentTomorrowFragment;
+import pe.apiconz.android.sanisidromovil.utils.Utils;
 
 
 public class MainActivity extends BaseActivity {
+
+    private static final String TAG = MainActivity.class.getCanonicalName();
 
     @Bind(R.id.drawer)
     protected DrawerLayout mDrawerLayout;
@@ -30,9 +46,15 @@ public class MainActivity extends BaseActivity {
     @Bind(R.id.viewpager)
     protected ViewPager viewPager;
 
+
+    protected List<EventEntity> currentActitivies;
+    protected List<EventEntity> tomorrowActitivies;
+    protected List<EventEntity> soonActitivies;
+
     @Override
     protected void onCreateView() {
 
+        setDataFromServices();
         setSupportActionBar();
         setupViewPager();
         setTabLayout();
@@ -56,20 +78,129 @@ public class MainActivity extends BaseActivity {
 
     }
 
+    private void setDataFromServices() {
+        SanIsidroMovilApp application = (SanIsidroMovilApp) getApplicationContext();
+        Firebase firebase = application.getFirebaseReferenceForActivities();
+
+        currentActitivies = new ArrayList<EventEntity>();
+        getCurrentActivities(firebase);
+
+        tomorrowActitivies = new ArrayList<EventEntity>();
+        getNextDayActivities(firebase);
+
+        soonActitivies = new ArrayList<EventEntity>();
+        getSoonActivities(firebase);
+
+
+    }
+
+    private void getNextDayActivities(Firebase firebase) {
+        String fechaRequerida = Utils.getCurrentDate(2);
+        Query query = firebase.orderByChild("FECHA").startAt(fechaRequerida).endAt(fechaRequerida).limitToFirst(50);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "count" + dataSnapshot.getChildrenCount());
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+
+                    String nombreEvento = postSnapshot.child("EVENTO").getValue().toString();
+                    String fechaEvento = postSnapshot.child("FECHA").getValue().toString();
+                    String horaEvento = postSnapshot.child("HORA").getValue().toString();
+                    EventEntity eventEntity = new EventEntity(nombreEvento, fechaEvento, horaEvento, 0);
+                    tomorrowActitivies.add(eventEntity);
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private void getCurrentActivities(Firebase firebase) {
+        String fechaRequerida = Utils.getCurrentDate(1);
+        Query query = firebase.orderByChild("FECHA").startAt(fechaRequerida).endAt(fechaRequerida).limitToFirst(50);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "count" + dataSnapshot.getChildrenCount());
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+
+                    String nombreEvento = postSnapshot.child("EVENTO").getValue().toString();
+                    String fechaEvento = postSnapshot.child("FECHA").getValue().toString();
+                    String horaEvento = postSnapshot.child("HORA").getValue().toString();
+
+                    EventEntity eventEntity = new EventEntity(nombreEvento, fechaEvento, horaEvento, 0);
+                    currentActitivies.add(eventEntity);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
+    private void getSoonActivities(Firebase firebase) {
+        Query query = firebase.orderByChild("FECHA").limitToFirst(50);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "count" + dataSnapshot.getChildrenCount());
+                for (DataSnapshot postSnapshot : dataSnapshot.getChildren()) {
+
+                    String nombreEvento = postSnapshot.child("EVENTO").getValue().toString();
+                    String fechaEvento = postSnapshot.child("FECHA").getValue().toString();
+                    String horaEvento = postSnapshot.child("HORA").getValue().toString();
+
+                    EventEntity eventEntity = new EventEntity(nombreEvento, fechaEvento, horaEvento, 0);
+                    soonActitivies.add(eventEntity);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
+    }
+
     private void setupViewPager() {
 
         Adapter adapter = new Adapter(getSupportFragmentManager());
-        adapter.addFragment(new CardContentFragment(), getString(R.string.tab_hoy));
-        adapter.addFragment(new CardContentFragment(), getString(R.string.tab_manana));
-        adapter.addFragment(new CardContentFragment(), getString(R.string.tab_semana));
+
+        CardContentTodayFragment todayFragment = new CardContentTodayFragment();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList("currentActivities", (ArrayList<? extends Parcelable>) currentActitivies);
+        todayFragment.setArguments(bundle);
+        adapter.addFragment(todayFragment, getString(R.string.tab_hoy));
+
+        CardContentTomorrowFragment tomorrowFragment = new CardContentTomorrowFragment();
+        Bundle bundle2 = new Bundle();
+        bundle2.putParcelableArrayList("nextDayActivities", (ArrayList<? extends Parcelable>) tomorrowActitivies);
+        tomorrowFragment.setArguments(bundle2);
+        adapter.addFragment(tomorrowFragment, getString(R.string.tab_manana));
+
+        CardContentAllFragment allFragment = new CardContentAllFragment();
+        Bundle bundle3 = new Bundle();
+        bundle3.putParcelableArrayList("soonActitivies", (ArrayList<? extends Parcelable>) soonActitivies);
+        allFragment.setArguments(bundle3);
+        adapter.addFragment(allFragment, getString(R.string.tab_semana));
+
         viewPager.setAdapter(adapter);
+
     }
 
     private void setTabLayout() {
         tabs.setupWithViewPager(viewPager);
     }
 
-    private void setSupportActionBar() {
+    @Override
+    protected void setSupportActionBar() {
         setSupportActionBar(toolbar);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
@@ -79,7 +210,6 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    @Override
     protected int getLayoutResource() {
         return R.layout.activity_main;
     }
@@ -95,7 +225,6 @@ public class MainActivity extends BaseActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
 
 
     static class Adapter extends FragmentPagerAdapter {
@@ -119,6 +248,7 @@ public class MainActivity extends BaseActivity {
         public void addFragment(Fragment fragment, String title) {
             mFragmentList.add(fragment);
             mFragmentTitleList.add(title);
+            notifyDataSetChanged();
         }
 
         @Override

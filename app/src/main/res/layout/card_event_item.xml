@@ -28,6 +28,8 @@
             android:layout_height="@dimen/card_title_height"
             android:layout_above="@+id/card_text"
             android:layout_marginLeft="@dimen/md_keylines"
+            android:ellipsize="end"
+            android:singleLine="true"
             android:text="@string/item_title"
             android:textAppearance="@style/TextAppearance.AppCompat.Title" />
 

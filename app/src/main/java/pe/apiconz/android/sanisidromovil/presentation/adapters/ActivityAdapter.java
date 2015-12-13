@@ -9,6 +9,7 @@ import java.util.List;
 
 import pe.apiconz.android.sanisidromovil.R;
 import pe.apiconz.android.sanisidromovil.model.entities.EventEntity;
+import pe.apiconz.android.sanisidromovil.utils.Utils;
 
 /**
  * Created by Armando on 12/12/2015.
@@ -19,6 +20,7 @@ public class ActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     public ActivityAdapter(List<EventEntity> eventList) {
         this.eventList = eventList;
+        notifyDataSetChanged();
     }
 
     @Override
@@ -32,8 +34,9 @@ public class ActivityAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         ActivityViewHolder activityViewHolder = (ActivityViewHolder) holder;
         EventEntity eventEntity = eventList.get(position);
         activityViewHolder.getCardTitle().setText(eventEntity.getNombre());
-        activityViewHolder.getCardText().setText(eventEntity.getFecha());
+        activityViewHolder.getCardText().setText(Utils.formatDateTime(eventEntity));
     }
+
 
     @Override
     public int getItemCount() {

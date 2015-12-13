@@ -22,11 +22,13 @@ public abstract class BaseActivity extends AppCompatActivity {
         setContentView(getLayoutResource());
 
         ButterKnife.bind(this);
-        
+
         onCreateView();
     }
 
     protected abstract void onCreateView();
+
+    protected abstract void setSupportActionBar();
 
     protected abstract int getLayoutResource();
 }
