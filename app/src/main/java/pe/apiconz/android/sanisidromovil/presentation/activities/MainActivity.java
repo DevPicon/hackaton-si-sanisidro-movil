@@ -6,16 +6,20 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
-import pe.wanavana.android.sanisidromovil.R;
+import butterknife.Bind;
+import pe.apiconz.android.sanisidromovil.R;
+
 
 public class MainActivity extends BaseActivity {
+
+    @Bind(R.id.drawer)
     private DrawerLayout mDrawerLayout;
+
     @Override
     protected void onCreateView() {
-        
+
         setSupportActionBar();
 
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(
                 new NavigationView.OnNavigationItemSelectedListener() {
@@ -53,7 +57,7 @@ public class MainActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case android.R.id.home:
                 mDrawerLayout.openDrawer(GravityCompat.START);
                 return true;

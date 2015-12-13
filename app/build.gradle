@@ -22,6 +22,11 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    packagingOptions {
+        exclude 'META-INF/services/javax.annotation.processing.Processor'
+    }
+} lintOptions {
+    disable 'InvalidPackage'
 }
 
 dependencies {
@@ -30,4 +35,7 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.1.1'
     compile 'com.android.support:design:23.1.1'
     compile 'com.android.support:recyclerview-v7:23.1.1'
+
+    compile 'com.jakewharton:butterknife:7.0.1'
+
 }
