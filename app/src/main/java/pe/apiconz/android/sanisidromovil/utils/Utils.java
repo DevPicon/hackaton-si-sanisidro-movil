@@ -1,5 +1,6 @@
 package pe.apiconz.android.sanisidromovil.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -20,6 +21,20 @@ public class Utils {
         }
         return "";
     }
+
+    public static long getTimeMillisecond(String oldTime){
+        SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yy - HH:mm");
+        formatter.setLenient(false);
+        Date oldDate = null;
+        try {
+            oldDate = formatter.parse(oldTime);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        long oldMillis = oldDate.getTime();
+        return oldMillis;
+    }
+
 
     public static String getCurrentDate(int when) {
         SimpleDateFormat sdfDate = new SimpleDateFormat("dd-MMM-yy");//dd/MM/yyyy

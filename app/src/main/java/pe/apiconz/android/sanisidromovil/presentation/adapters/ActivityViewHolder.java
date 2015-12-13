@@ -1,6 +1,7 @@
 package pe.apiconz.android.sanisidromovil.presentation.adapters;
 
 import android.content.Intent;
+import android.provider.CalendarContract;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
@@ -8,10 +9,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.util.Calendar;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import pe.apiconz.android.sanisidromovil.R;
 import pe.apiconz.android.sanisidromovil.presentation.activities.DetailActivity;
+import pe.apiconz.android.sanisidromovil.utils.Utils;
 
 /**
  * Created by Armando on 12/12/2015.
@@ -41,9 +45,46 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
             public void onClick(View v) {
 
                 Intent intent = new Intent(v.getContext(), DetailActivity.class);
-                intent.putExtra("id",v.getId());
-                intent.putExtra("itemId",getItemId());
+                intent.putExtra("id", v.getId());
+                intent.putExtra("itemId", getItemId());
                 v.getContext().startActivity(intent);
+            }
+        });
+
+        scheduleButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                String value = ((TextView) cardTitle).getText().toString();
+
+                String dia = ((TextView) cardText).getText().toString();
+
+                Calendar cal = Calendar.getInstance();
+                Intent intent = new Intent(Intent.ACTION_EDIT);
+                intent.setData(CalendarContract.Events.CONTENT_URI);
+                intent.setType("vnd.android.cursor.item/event");
+                intent.putExtra("beginTime", Utils.getTimeMillisecond(dia));
+                intent.putExtra("allDay", false);
+                intent.putExtra("endTime", Utils.getTimeMillisecond(dia) + 60 * 60 * 1000);
+                intent.putExtra("title", value);
+                v.getContext().startActivity(intent);
+            }
+        });
+
+        shareButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent sendIntent = new Intent();
+                sendIntent.setAction(Intent.ACTION_SEND);
+
+                String value = ((TextView) cardTitle).getText().toString();
+                String dia = ((TextView) cardText).getText().toString();
+
+                sendIntent.putExtra(Intent.EXTRA_TEXT, dia);
+                sendIntent.putExtra(Intent.EXTRA_TITLE, value);
+
+                sendIntent.setType("text/plain");
+                v.getContext().startActivity(Intent.createChooser(sendIntent, v.getContext().getResources().getText(R.string.send_to)));
             }
         });
     }
