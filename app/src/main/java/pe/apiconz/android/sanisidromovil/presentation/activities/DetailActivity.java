@@ -1,8 +1,11 @@
 package pe.apiconz.android.sanisidromovil.presentation.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.util.Log;
+import android.view.View;
 import android.widget.TextView;
 
 import com.firebase.client.DataSnapshot;
@@ -107,5 +110,20 @@ public class DetailActivity extends BaseActivity {
     @Override
     protected int getLayoutResource() {
         return R.layout.activity_detail;
+    }
+
+    public static final String MAPS_INTENT_URI = "geo:0,0?q=";
+    public static final String MAPS_NAVIGATION_INTENT_URI = "google.navigation:mode=w&q=";
+
+    public void llevar(View view) {
+
+        String place = ((TextView) detailEventPlace).getText().toString();
+
+
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(MAPS_INTENT_URI +
+                Uri.encode(place)));
+        startActivity(intent);
+
     }
 }
