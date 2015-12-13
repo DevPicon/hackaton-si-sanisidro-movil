@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">San Isidro Movil</string>
+    <string name="item_title">Este es un título</string>
+    <string name="item_date">12/12/15 - 8:00pm</string>
+
+
+    <string name="tab_hoy">Hoy</string>
+    <string name="tab_manana">Mañana</string>
+    <string name="tab_semana">Esta Semana</string>
+
+
 </resources>
