@@ -80,8 +80,7 @@ public class ActivityViewHolder extends RecyclerView.ViewHolder {
                 String value = ((TextView) cardTitle).getText().toString();
                 String dia = ((TextView) cardText).getText().toString();
 
-                sendIntent.putExtra(Intent.EXTRA_TEXT, dia);
-                sendIntent.putExtra(Intent.EXTRA_TITLE, value);
+                sendIntent.putExtra(Intent.EXTRA_TEXT, value + " " + dia);
 
                 sendIntent.setType("text/plain");
                 v.getContext().startActivity(Intent.createChooser(sendIntent, v.getContext().getResources().getText(R.string.send_to)));
